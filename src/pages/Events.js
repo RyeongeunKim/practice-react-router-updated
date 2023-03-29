@@ -5,13 +5,17 @@ import EventsList from "../components/EventsList";
 function EventsPage() {
   const events = useLoaderData();
 
-  return <EventsList events={events} />;
+  return (
+    <>
+      <EventsList events={events} />
+    </>
+  );
 }
 
 export default EventsPage;
 
 export async function loader() {
-  const response = await fetch("events");
+  const response = await fetch("/events");
 
   if (!response.ok) return;
 
