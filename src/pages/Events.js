@@ -1,29 +1,21 @@
-import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
+
 import EventsList from "../components/EventsList";
 
 function EventsPage() {
-  const [events, setEvents] = useState([]);
+  const events = useLoaderData();
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("events");
-      const { events } = await response.json();
-      setEvents(events);
-    })();
-  }, []);
-  return (
-    <>
-      <div>
-        {events.length ? (
-          <ul>
-            {events.map((event) => (
-              <li key={event.id}>{event.title}</li>
-            ))}
-          </ul>
-        ) : null}
-      </div>
-    </>
-  );
+  return <EventsList events={events} />;
 }
 
 export default EventsPage;
+
+export async function loader() {
+  const response = await fetch("events");
+
+  if (!response.ok) return;
+
+  const { events } = await response.json();
+
+  return events;
+}
